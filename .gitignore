@@ -1,0 +1,5 @@
+.vscode
+bot/target
+bot/.classpath
+bot/.project
+bot/.settings
