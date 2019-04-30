@@ -1,5 +1,7 @@
+target
+bin
+
 .vscode
-bot/target
-bot/.classpath
-bot/.project
-bot/.settings
+.classpath
+.project
+.settings
