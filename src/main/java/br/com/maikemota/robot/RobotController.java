@@ -12,8 +12,8 @@ import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 
-import br.com.maikemota.robot.enums.SpecialKeys;
-import br.com.maikemota.robot.utils.KeyboardUtil;
+import br.com.maikemota.robot.keyboard.SpecialKeys;
+import br.com.maikemota.robot.keyboard.KeyboardController;
 
 public class RobotController {
 
@@ -25,7 +25,7 @@ public class RobotController {
     public static RobotController initialize() throws AWTException {
         RobotController controller = new RobotController();
         RobotController.context = new Robot();
-        KeyboardUtil.setContext(RobotController.context);
+        KeyboardController.setContext(RobotController.context);
         // MouseUtil.setContext(RobotController.context);
         return controller;
     }
@@ -110,7 +110,7 @@ public class RobotController {
         int length = text.length();
         for (int i = 0; i < length; i++) {
             char character = text.charAt(i);
-            KeyboardUtil.type(character);
+            KeyboardController.type(character);
             this.wait(20);
         }
         return this;
@@ -122,23 +122,59 @@ public class RobotController {
         return this;
     }
 
+    public RobotController holdKey(SpecialKeys key) {
+        KeyboardController.hold(key);
+        return this;
+    }
+
+    public RobotController releaseKey(SpecialKeys key) {
+        KeyboardController.release(key);
+        return this;
+    }
+
     public RobotController holdEnter() {
-        KeyboardUtil.hold(SpecialKeys.ENTER);
+        this.holdKey(SpecialKeys.ENTER);
         return this;
     }
 
     public RobotController releaseEnter() {
-        KeyboardUtil.release(SpecialKeys.ENTER);
+        this.releaseKey(SpecialKeys.ENTER);
         return this;
     }
 
     public RobotController holdControlKey() {
-        KeyboardUtil.hold(SpecialKeys.CONTROL);
+        this.holdKey(SpecialKeys.CONTROL);
         return this;
     }
 
     public RobotController releaseControlKey() {
-        KeyboardUtil.release(SpecialKeys.CONTROL);
+        this.releaseKey(SpecialKeys.CONTROL);
+        return this;
+    }
+
+    public RobotController holdWindowsKey() {
+        this.holdKey(SpecialKeys.WINDOWS);
+        return this;
+    }
+
+    public RobotController releaseWindowsKey() {
+        this.releaseKey(SpecialKeys.WINDOWS);
+        return this;
+    }
+
+    public RobotController holdArrowUpKey(){
+        this.holdKey(SpecialKeys.ARROW_UP);
+        return this;
+    }
+
+    public RobotController releaseArrowUpKey(){
+        this.releaseKey(SpecialKeys.ARROW_UP);
+        return this;
+    }
+
+    public RobotController hitArrowUpKey() {
+        this.holdArrowUpKey();
+        this.releaseArrowUpKey();
         return this;
     }
 
