@@ -1,26 +1,26 @@
-package br.com.maikemota.robot.utils;
+package br.com.maikemota.robot.keyboard;
 
 import static java.awt.event.KeyEvent.*;
 
 import java.awt.Robot;
 
-import br.com.maikemota.robot.enums.SpecialKeys;
+import br.com.maikemota.robot.keyboard.SpecialKeys;
 import br.com.maikemota.robot.exceptions.ContextNotFoundException;
 
-public class KeyboardUtil {
+public class KeyboardController {
 
     private static Robot _context;
 
     public static void setContext(final Robot context) {
-        KeyboardUtil._context = context;
+        KeyboardController._context = context;
     }
 
     public static void hold(final SpecialKeys key) {
-        KeyboardUtil.getContext().keyPress(key.geKeyCode());
+        KeyboardController.getContext().keyPress(key.geKeyCode());
     }
 
     public static void release(final SpecialKeys key) {
-        KeyboardUtil.getContext().keyRelease(key.geKeyCode());
+        KeyboardController.getContext().keyRelease(key.geKeyCode());
     }
     
     public static void type(char character) {
@@ -135,15 +135,15 @@ public class KeyboardUtil {
         if (length == 0) {
             return;
         }
-        KeyboardUtil.getContext().keyPress(keyCodes[offset]);
+        KeyboardController.getContext().keyPress(keyCodes[offset]);
         doType(keyCodes, offset + 1, length - 1);
-        KeyboardUtil.getContext().keyRelease(keyCodes[offset]);
+        KeyboardController.getContext().keyRelease(keyCodes[offset]);
     }
 
     private static Robot getContext() { 
-        if(KeyboardUtil._context == null){
+        if(KeyboardController._context == null){
             throw new ContextNotFoundException("Robot context not found, please make sure to configure robot context calling KeyboardUtil.setContext(context) before use any of KeyboardUtil methods.") ;
         }
-        return KeyboardUtil._context;
+        return KeyboardController._context;
     }
 }
