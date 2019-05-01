@@ -1,20 +1,26 @@
 package br.com.maikemota.robot;
 
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.InputEvent;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.awt.AWTException;
 import java.awt.MouseInfo;
+import java.awt.Rectangle;
 
 import br.com.maikemota.robot.enums.SpecialKeys;
 import br.com.maikemota.robot.utils.KeyboardUtil;
-
-
 
 public class RobotController {
 
     private static Robot context;
 
-    private RobotController() throws AWTException {}
+    private RobotController() throws AWTException {
+    }
 
     public static RobotController initialize() throws AWTException {
         RobotController controller = new RobotController();
@@ -26,11 +32,12 @@ public class RobotController {
 
     public static RobotController initialize(final int startUpDelay) throws AWTException {
         RobotController controller = RobotController.initialize();
-        RobotController.context.delay(startUpDelay);
+        controller.wait(startUpDelay);
         return controller;
     }
 
-    public static RobotController initialize(final int delayBetweenClicks, final int delayBetweenKeys) throws AWTException {
+    public static RobotController initialize(final int delayBetweenClicks, final int delayBetweenKeys)
+            throws AWTException {
         RobotController controller = RobotController.initialize();
         return controller;
     }
@@ -45,8 +52,8 @@ public class RobotController {
             if (currentY != y) {
                 currentY = this.applyStep(currentY, y);
             }
-            RobotController.context.mouseMove((int)currentX, (int)currentY);
-            RobotController.context.delay(1);
+            RobotController.context.mouseMove((int) currentX, (int) currentY);
+            this.wait(1);
         }
         return this;
     }
@@ -63,14 +70,14 @@ public class RobotController {
 
     public RobotController clickLeftMouseButton() {
         this.pressLeftMouseButton();
-        RobotController.context.delay(50);
+        this.wait(50);
         this.releaseLeftMouseButton();
         return this;
     }
 
     public RobotController doubleClickLeftMouseButton() {
         this.clickLeftMouseButton();
-        RobotController.context.delay(50);
+        this.wait(50);
         this.clickLeftMouseButton();
         return this;
     }
@@ -87,14 +94,14 @@ public class RobotController {
 
     public RobotController clickRightMouseButton() {
         this.pressRightMouseButton();
-        RobotController.context.delay(50);
+        this.wait(50);
         this.releaseRightMouseButton();
         return this;
     }
 
     public RobotController doubleClickRightMouseButton() {
         this.clickRightMouseButton();
-        RobotController.context.delay(50);
+        this.wait(50);
         this.clickRightMouseButton();
         return this;
     }
@@ -107,7 +114,7 @@ public class RobotController {
             this.wait(20);
         }
         return this;
-    }    
+    }
 
     public RobotController hitEnter() {
         this.holdEnter();
@@ -144,12 +151,20 @@ public class RobotController {
         return this;
     }
 
+    public RobotController takeScreenShot() throws IOException {
+        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+        RobotController.context.createScreenCapture(screenRect);
+        BufferedImage screenFullImage = RobotController.context.createScreenCapture(screenRect);
+        ImageIO.write(screenFullImage, "jpg", new File(String.valueOf(System.currentTimeMillis()) + ".jpg"));
+        return this;
+    }
+
     private double applyStep(final double reference, final double target) {
         final double newPosition = reference + this.calculateStep(reference, target);
         return newPosition;
     }
 
-    private double calculateStep(final double reference, final double target) { 
+    private double calculateStep(final double reference, final double target) {
         double step = target > reference ? 1 : -1;
         return step;
     }
