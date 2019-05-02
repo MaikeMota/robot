@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
@@ -32,7 +33,7 @@ public class RobotController {
 
     public static RobotController initialize(final int startUpDelay) throws AWTException {
         RobotController controller = RobotController.initialize();
-        controller.wait(startUpDelay);
+        controller.waitFor(startUpDelay);
         return controller;
     }
 
@@ -53,7 +54,7 @@ public class RobotController {
                 currentY = this.applyStep(currentY, y);
             }
             RobotController.context.mouseMove((int) currentX, (int) currentY);
-            this.wait(1);
+            this.waitFor(1);
         }
         return this;
     }
@@ -70,14 +71,14 @@ public class RobotController {
 
     public RobotController clickLeftMouseButton() {
         this.pressLeftMouseButton();
-        this.wait(50);
+        this.waitFor(50);
         this.releaseLeftMouseButton();
         return this;
     }
 
     public RobotController doubleClickLeftMouseButton() {
         this.clickLeftMouseButton();
-        this.wait(50);
+        this.waitFor(50);
         this.clickLeftMouseButton();
         return this;
     }
@@ -94,14 +95,14 @@ public class RobotController {
 
     public RobotController clickRightMouseButton() {
         this.pressRightMouseButton();
-        this.wait(50);
+        this.waitFor(50);
         this.releaseRightMouseButton();
         return this;
     }
 
     public RobotController doubleClickRightMouseButton() {
         this.clickRightMouseButton();
-        this.wait(50);
+        this.waitFor(50);
         this.clickRightMouseButton();
         return this;
     }
@@ -111,7 +112,7 @@ public class RobotController {
         for (int i = 0; i < length; i++) {
             char character = text.charAt(i);
             KeyboardController.type(character);
-            this.wait(20);
+            this.waitFor(20);
         }
         return this;
     }
@@ -178,13 +179,27 @@ public class RobotController {
         return this;
     }
 
-    public RobotController wait(final int delay) {
+    /**
+     * Wait for determined amount of time
+     * @param delay time to wait in ms
+     */
+    public RobotController waitFor(final long delay) {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return this;
+    }
+
+    /**
+     * Wait for determined amount of time
+     * @param delay time to wait
+     * @param unit Unit of time for wait
+     */
+    public RobotController waitFor(final long delay, final ChronoUnit unit){
+        final long unitDelay = unit.getDuration().toMillis();
+        return waitFor(delay * unitDelay);
     }
 
     public RobotController takeScreenShot() throws IOException {
