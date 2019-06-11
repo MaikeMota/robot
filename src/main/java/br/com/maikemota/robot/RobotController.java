@@ -59,6 +59,15 @@ public class RobotController {
         return this;
     }
 
+    public RobotController moveMouseAndReturnToStartPosition(final double x, final double y){        
+        double initialX = this.getCurrentMouseX();
+        double initialY = this.getCurrentMouseY();
+        this.moveMouse(x, y);
+        this.waitFor(50);
+        this.moveMouse(initialX, initialY);
+        return this;
+    }
+
     public RobotController pressLeftMouseButton() {
         RobotController.context.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         return this;
